@@ -35,7 +35,10 @@ class ButtonPay extends React.Component {
   };
 
   redirect() {
-    window.location.href = 'http://mobilepay.cf/'
+    this.setState({
+      pay: undefined
+    });
+    window.location.replace('http://localhost:3000/');
   };
 
   repeatPay() {
@@ -68,7 +71,7 @@ class ButtonPay extends React.Component {
 
   disabled() {
     let value = (
-      (this.props.telValid == 'true' && this.props.summValid == 'true') || this.props.request == 'false' ) 
+      (this.props.telValid == 'true' && this.props.summValid == 'true') || this.props.request == 'false' )
       ? false
       : true;
     return value;
