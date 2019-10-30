@@ -38,7 +38,7 @@ class ButtonPay extends React.Component {
     this.setState({
       pay: undefined
     });
-    window.location.replace('http://localhost:3000/');
+    window.location.replace('http://mobilepay.cf/');
   };
 
   repeatPay() {
