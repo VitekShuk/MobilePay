@@ -2,62 +2,47 @@ import React, { useState } from 'react';
 import ModalWindow from '../components/ModalWindow';
 import Spinner from '../components/Spinner';
 
-class ButtonPay extends React.Component {
-  constructor(props) {
-    super(props);
+function ButtonPay(props) {
+  
+  const [pay, setPay] = useState(null);
+  const [request, setRequest] = useState('false');
 
-    this.state = {
-      pay: undefined,
-      request: 'false'
-    };
-
-    this.redirect = this.redirect.bind(this);
-    this.repeatPay = this.repeatPay.bind(this);
-    this.toPay = this.toPay.bind(this);
-    this.disabled = this.disabled.bind(this);
-
-  };
-
-  toPay() {
-    this.setState({ request: 'true' })
+  function toPay() {
+    setRequest('true' );
     if (Math.random() > 0.5) {
-      setTimeout( () => this.setState({
-        pay: 'true',
-        request: 'false'
-      }), 3000);
+      setTimeout( () => {
+        setPay('true');
+        setRequest('false');
+      }, 3000);
     }
     else {
-      setTimeout( () => this.setState({
-        pay: 'false',
-        request: 'false'
-      }), 3000);
+      setTimeout( () => {
+        setPay('false');
+        setRequest('false');
+      }, 3000);
     };
   };
 
-  redirect() {
-    this.setState({
-      pay: undefined
-    });
+  function redirect() {
+      setPay(null);
     window.location.replace('http://mobilepay.cf/');
   };
 
-  repeatPay() {
-    this.setState({
-      pay: undefined
-    });
+  function repeatPay() {
+    setPay(null);
   };
 
-  showModalWindow() {
-    if (this.state.pay == 'true') {
+  function showModalWindow() {
+    if (pay === 'true') {
       return (
-        <ModalWindow func={this.redirect}>
+        <ModalWindow func={redirect()}>
           Оплата выполнена успешно!
         </ModalWindow>
       );
     }
-    else if (this.state.pay == 'false') {
+    else if (pay === 'false') {
       return (
-        <ModalWindow func={this.repeatPay}>
+        <ModalWindow func={repeatPay()}>
           К сожалению, не удалось выполнить платеж.
           <br />
           Повторите попытку позднее.
@@ -69,24 +54,22 @@ class ButtonPay extends React.Component {
     };
   };
 
-  disabled() {
+  function disabled() {
     let value = (
-      (this.props.telValid == 'true' && this.props.summValid == 'true') || this.props.request == 'false' )
+      (props.telValid === 'true' && props.summValid === 'true') || props.request === 'false' )
       ? false
       : true;
     return value;
   };
 
-render() {
-    return (
-      <>
-        <button onClick={this.toPay} disabled={this.disabled()}>
-          {this.state.request == 'true' ? <Spinner /> : 'Оплатить'}
-        </button>
-        {this.showModalWindow()}
-      </>
-    );
-  };
+  return (
+    <>
+      <button onClick={toPay()} disabled={disabled()}>
+        {request === 'true' ? <Spinner /> : 'Оплатить'}
+      </button>
+      {showModalWindow()}
+    </>
+  );
 };
 
 export default ButtonPay;
