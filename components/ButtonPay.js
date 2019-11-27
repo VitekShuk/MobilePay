@@ -1,13 +1,18 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import ModalWindow from '../components/ModalWindow';
 import Spinner from '../components/Spinner';
 
-function ButtonPay(props) {
+const ButtonPay = (props) => {
   
   const [pay, setPay] = useState(null);
   const [request, setRequest] = useState('false');
+  const [butdisab, setButdisab] = useState(null);
 
-  function toPay() {
+  useEffect(
+    () => disabled
+  );
+
+  const toPay = () => {
     setRequest('true' );
     if (Math.random() > 0.5) {
       setTimeout( () => {
@@ -23,26 +28,26 @@ function ButtonPay(props) {
     };
   };
 
-  function redirect() {
+  const redirect = () => {
       setPay(null);
     window.location.replace('http://mobilepay.cf/');
   };
 
-  function repeatPay() {
+  const repeatPay = () => {
     setPay(null);
   };
 
-  function showModalWindow() {
+  const showModalWindow = () => {
     if (pay === 'true') {
       return (
-        <ModalWindow func={redirect()}>
+        <ModalWindow func={redirect}>
           Оплата выполнена успешно!
         </ModalWindow>
       );
     }
     else if (pay === 'false') {
       return (
-        <ModalWindow func={repeatPay()}>
+        <ModalWindow func={repeatPay}>
           К сожалению, не удалось выполнить платеж.
           <br />
           Повторите попытку позднее.
@@ -54,17 +59,15 @@ function ButtonPay(props) {
     };
   };
 
-  function disabled() {
-    let value = (
-      (props.telValid === 'true' && props.summValid === 'true') || props.request === 'false' )
-      ? false
-      : true;
-    return value;
+  const disabled = () => {
+    ( (props.telValid === 'true' && props.summValid === 'true') || props.request === 'false' )
+    ? setButdisab(null)
+    : setButdisab('disabled');
   };
 
   return (
     <>
-      <button onClick={toPay()} disabled={disabled()}>
+      <button onClick={toPay} disabled={butdisab}>
         {request === 'true' ? <Spinner /> : 'Оплатить'}
       </button>
       {showModalWindow()}
